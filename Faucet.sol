@@ -36,21 +36,25 @@ contract Faucet is Ownable {
     }
 
     function liquidate(uint256 _amount) external onlyOwner {
+        // Make sure faucet has tokens available to distribute
         require(
             Token.balanceOf(address(this)) > 0,
             "Faucet balance insufficient."
         );
+        // Allow owner to withdraw all tokens in the contract by entering 0
         if (_amount == 0) {
             _amount = Token.balanceOf(address(this));
         }
         Token.transfer(msg.sender, _amount);
     }
-
+    
     modifier allowedToWithdraw() {
+        // Make sure faucet has tokens available to distribute
         require(
             Token.balanceOf(address(this)) > 100 * (10**TOKEN_DECIMALS),
             "Faucet balance insufficient."
         );
+        // Don't allow user to withdraw more than 100 tokens every 5 minutes
         require(
             block.timestamp >= lastAccessTime[msg.sender] + waitTime,
             "You must wait 5 minutes between withdrawals."
