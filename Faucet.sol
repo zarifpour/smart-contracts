@@ -36,7 +36,7 @@ contract Faucet is Ownable {
     }
 
     function liquidate(uint256 _amount) external onlyOwner {
-        // Make sure faucet has tokens available to distribute
+        // Make sure faucet has tokens available to withdraw
         require(
             Token.balanceOf(address(this)) > 0,
             "Faucet balance insufficient."
@@ -49,7 +49,7 @@ contract Faucet is Ownable {
     }
     
     modifier allowedToWithdraw() {
-        // Make sure faucet has tokens available to distribute
+        // Make sure faucet has tokens available to withdraw
         require(
             Token.balanceOf(address(this)) > 100 * (10**TOKEN_DECIMALS),
             "Faucet balance insufficient."
