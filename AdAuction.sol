@@ -43,6 +43,7 @@ contract AdvertisementAuction is Ownable {
     event Withdrawal(uint256 amount);
 
     function bid(string memory _adImageUrl, uint256 _amount) external {
+        // Make sure bid is higher than the last bid
         require(_amount > lastBid, "Your bid is lower than the last bid.");
         Token.transferFrom(msg.sender, address(this), _amount);
         advertiser = msg.sender;
@@ -61,6 +62,7 @@ contract AdvertisementAuction is Ownable {
     }
 
     function withdraw() external onlyOwner {
+        // Make sure contract has tokens avaialble to withdraw
         require(
             Token.balanceOf(address(this)) > 0,
             "There is nothing to withdraw."
